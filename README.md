@@ -1,5 +1,6 @@
 # marching_cube
- practice
+
+.\Marching_Cube.exe sphere sphere.ply 0
 
 ## References  
 [1] https://github.com/nihaljn/marching-cubes/tree/main
