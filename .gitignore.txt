@@ -1,5 +1,0 @@
-# Ignore Visual Studio files
-.vs/
-
-# Ignore output files
-out/

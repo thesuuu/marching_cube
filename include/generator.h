@@ -18,5 +18,5 @@ public:
     std::vector<std::vector<std::vector<float>>> generate_random_grid();
     std::vector<std::vector<std::vector<float>>> generate_sphere(float centerX, float centerY, float centerZ, float radius);
     std::vector<std::vector<std::vector<float>>> generate_nested_spheres();
-    std::vector<std::vector<std::vector<float>>> read_grid_from_file(const char* path);
+    bool read_grid_from_file(const char* path, std::vector<std::vector<std::vector<float>>>& scalarFunction);
 };

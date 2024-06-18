@@ -88,14 +88,16 @@ std::vector<Triangle> MarchingCube::triangulate_cell(GridCell& cell, float isova
 
 std::vector<Triangle> MarchingCube::triangulate_field(std::vector<std::vector<std::vector<float>>>& scalarField, float isovalue)
 {
-    int size = static_cast<int>(scalarField.size());
+    int size_x = static_cast<int>(scalarField.size());
+    int size_y = static_cast<int>(scalarField[0].size());
+    int size_z = static_cast<int>(scalarField[0][0].size());
     std::vector<Triangle> triangles;
 
-    for (int i = 0; i + 1 < size; i++)
+    for (int i = 0; i + 1 < size_x; i++)
     {
-        for (int j = 0; j + 1 < size; j++)
+        for (int j = 0; j + 1 < size_y; j++)
         {
-            for (int k = 0; k + 1 < size; k++)
+            for (int k = 0; k + 1 < size_z; k++)
             {
                 int x = i, y = j, z = k;
                 // cell ordered according to convention in referenced website

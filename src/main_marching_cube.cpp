@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	float isovalue = std::stof(argv[3]);
 
 	MarchingCube mycube = MarchingCube();
-	int grid_max = 100;
+	int grid_max = 400;
 	Generator generator = Generator(grid_max);
 	std::vector<std::vector<std::vector<float>>> field;
 
@@ -23,15 +23,16 @@ int main(int argc, char* argv[])
 	}
 	else if (file_in == "sphere") {
 		std::cout << "Generating sphere grid..." << std::endl;
-		field = generator.generate_sphere(50, 50, 50, 30);
+		field = generator.generate_sphere(100, 100, 100, 80);
 	}
 	else if (file_in == "nested") {
 		std::cout << "Generating nested sphere grid..." << std::endl;
 		field = generator.generate_nested_spheres();
 	}
 	else {
+		// 暂时只支持mri.raw文件的输入
 		std::cout << "Reading grid from " << file_in << "..." << std::endl;
-		field = generator.read_grid_from_file(file_in.c_str());
+		generator.read_grid_from_file(file_in.c_str(), field);
 	}
 	std::cout << "Done." << std::endl;
 

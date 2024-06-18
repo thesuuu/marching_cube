@@ -17,6 +17,7 @@ VertexContainer hash_vertices_to_indices(std::vector<Triangle>& triangles)
 			}
 			indices.push_back(container.vertexMap[triangle.p[i]]);
 		}
+        // 存入三角形的三个顶点的索引
         container.triangles.push_back(indices);
     }
 
@@ -42,11 +43,11 @@ void write_to_ply(std::vector<Triangle>& triangles, const char* path)
     outputFile << "end_header\n";
 
     // 写入顶点数据
-    for (auto& vertexPair : container.vertexMap)
-    {
-        const Point& vertex = vertexPair.first;
+    std::vector<Point> vertices(container.vertexMap.size());
+    for (auto& vertex : container.vertexMap)
+        vertices[vertex.second] = vertex.first;
+    for (auto& vertex : vertices) // 按照索引顺序写入
         outputFile << vertex.x << " " << vertex.y << " " << vertex.z << "\n";
-    }
     // 写入面数据
     for (auto& triangle : container.triangles)
     {

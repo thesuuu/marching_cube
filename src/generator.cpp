@@ -78,15 +78,64 @@ std::vector<std::vector<std::vector<float>>> Generator::generate_nested_spheres(
 	return scalarFunction;
 }
 
-std::vector<std::vector<std::vector<float>>> Generator::read_grid_from_file(const char* path)
-{
-	std::vector<std::vector<std::vector<float>>> scalarFunction(GRID_MAX, std::vector<std::vector<float>>(GRID_MAX, std::vector<float>(GRID_MAX)));
+bool Generator::read_grid_from_file(const char* path, std::vector<std::vector<std::vector<float>>>& scalarFunction) {
+	
+	short int themax = 0;
+	short int themin = std::numeric_limits<short int>::max();
+	std::ifstream file;
+	std::cerr << "Reading data ...\n";
+	file.open(path, std::ios::binary);
+	if (!file) {
+		std::cerr << "File open failed\n";
+		return 0;
+	}
 
-	int i, j, k;
-	float value;
-	FILE* inputFile = fopen(path, "r");
-	while (fscanf(inputFile, "%d %d %d %f", &i, &j, &k, &value) != EOF)
-		scalarFunction[i][j][k] = value;
+	// NX, NY, NZ 是已定义的网格大小
+	int NX = 200; int NY = 160; int NZ = 160;
 
-	return scalarFunction;
+	scalarFunction.resize(NX, std::vector<std::vector<float>>(NY, std::vector<float>(NZ)));
+
+
+	//std::ofstream outFile("output.txt");
+	//if (!outFile) {
+	//	std::cerr << "Output file open failed\n";
+	//	return false;
+	//}
+
+
+	// 读取文件内容
+	for (int k = 0; k < NZ; k++) {
+		for (int j = 0; j < NY; j++) {
+			for (int i = 0; i < NX; i++) {
+				char c;
+				if (!file.get(c)) {
+					std::cerr << "Unexpected end of file\n";
+					return 0;
+				}
+				//std::cout << i << " " << j << " " << k << std::endl;
+
+				short int value = static_cast<short int>(c);
+				scalarFunction[i][j][k] = value;
+				if (value > themax) themax = value;
+				if (value < themin) themin = value;
+
+				//outFile << i << " " << j << " " << k << " " << value << '\n';
+
+				//float value;
+				////size_t readCount = fread(&value, sizeof(float), 1, inputFile);
+				////if (readCount != 1) {
+				////	std::cerr << "Error reading file: " << path << std::endl;
+				////	fclose(inputFile);
+				////	return scalarFunction;
+				////}
+				//fread(&value, sizeof(float), 1, inputFile);
+				//scalarFunction[i][j][k] = value;
+			}
+		}
+	}
+
+	file.close();
+	std::cerr << "Volumetric data range: " << themin << " -> " << themax << '\n';
+	
+	return 1;
 }
